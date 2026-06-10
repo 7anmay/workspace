@@ -35,6 +35,8 @@ class ApartmentMonitor:
         seen.update(listing.stable_id() for listing in matches)
         state.save_seen(seen)
         if self.notify and self.notifier:
+            if config.slack_channel_id:
+                self.notifier.channel_id = config.slack_channel_id
             self.notifier.send_listings(fresh, config)
         return fresh
 

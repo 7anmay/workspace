@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
+from threading import Event
 
 from slack_sdk import WebClient
 from slack_sdk.socket_mode import SocketModeClient
@@ -27,12 +28,11 @@ class ApartmentSlackApp:
         self.processor = SlackCommandProcessor(config_store)
         self.client.socket_mode_request_listeners.append(self._handle_socket_request)
 
-    def start(self) -> None:
+    def start(self, *, block: bool = True) -> None:
         self.client.connect()
         logger.info("Apartment Slack bot connected")
-        from threading import Event
-
-        Event().wait()
+        if block:
+            Event().wait()
 
     def _handle_socket_request(self, client: SocketModeClient, request: SocketModeRequest) -> None:
         if request.type != "events_api":

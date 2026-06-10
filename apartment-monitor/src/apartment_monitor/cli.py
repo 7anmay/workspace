@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import logging
 from pathlib import Path
+from threading import Thread
 
 from .config import ConfigStore
 from .monitor import ApartmentMonitor
@@ -24,6 +25,7 @@ def main() -> None:
 
     subparsers.add_parser("watch", help="Run scheduled searches forever.")
     subparsers.add_parser("slack-bot", help="Listen for Slack commands via Socket Mode.")
+    subparsers.add_parser("serve", help="Run scheduled searches and Slack commands together.")
 
     args = parser.parse_args()
     logging.basicConfig(level=getattr(logging, args.log_level.upper()), format="%(levelname)s %(message)s")
@@ -47,6 +49,14 @@ def main() -> None:
         return
 
     if args.command == "slack-bot":
+        ApartmentSlackApp(store).start()
+        return
+
+    if args.command == "serve":
+        config = store.load()
+        notifier = SlackNotifier(channel_id=config.slack_channel_id)
+        monitor = ApartmentMonitor(store, notifier=notifier)
+        Thread(target=monitor.watch, daemon=True, name="apartment-monitor-watch").start()
         ApartmentSlackApp(store).start()
         return
 

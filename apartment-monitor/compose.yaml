@@ -1,0 +1,12 @@
+services:
+  apartment-monitor:
+    build: .
+    image: apartment-monitor:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      CONFIG_PATH: /data/config.yaml
+    volumes:
+      - ./data:/data
+    command: ["apartment-monitor", "--config", "/data/config.yaml", "serve"]

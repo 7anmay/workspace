@@ -18,7 +18,7 @@ This tool uses Slack Socket Mode, so you do not need to host a public webhook.
 
 Required Slack app setup:
 
-1. Create a Slack app.
+1. Create a Slack app from `slack-app-manifest.yaml`.
 2. Add bot scopes: `chat:write`, `channels:history`, `groups:history`, `im:history`, `app_mentions:read`.
 3. Enable Socket Mode and create an app-level token with `connections:write`.
 4. Subscribe to bot events: `message.channels`, `message.groups`, `message.im`, and `app_mention`.
@@ -27,7 +27,31 @@ Required Slack app setup:
    - `SLACK_BOT_TOKEN=xoxb-...`
    - `SLACK_APP_TOKEN=xapp-...`
 
-## Install
+## Deploy with Docker Compose
+
+1. Copy the environment template:
+
+```bash
+cp .env.example .env
+```
+
+2. Fill in `SLACK_BOT_TOKEN` and `SLACK_APP_TOKEN` in `.env`.
+3. Invite the bot to your apartment channel.
+4. Start the service:
+
+```bash
+./scripts/deploy.sh
+```
+
+The container stores `config.yaml` and `state.json` in `./data`. The default command is:
+
+```bash
+apartment-monitor --config /data/config.yaml serve
+```
+
+`serve` runs scheduled searches and the Slack command listener in one process.
+
+## Local install
 
 ```bash
 cd apartment-monitor
@@ -55,16 +79,22 @@ One search cycle:
 apartment-monitor --config config.yaml run-once
 ```
 
-Scheduled monitor:
+Scheduled monitor only:
 
 ```bash
 apartment-monitor --config config.yaml watch
 ```
 
-Slack command bot:
+Slack command bot only:
 
 ```bash
 apartment-monitor --config config.yaml slack-bot
+```
+
+Scheduled monitor plus Slack command bot:
+
+```bash
+apartment-monitor --config config.yaml serve
 ```
 
 In Slack, bind notifications to the channel:
