@@ -49,3 +49,7 @@ def main() -> None:
     if args.command == "slack-bot":
         ApartmentSlackApp(store).start()
         return
+
+
+if __name__ == "__main__":
+    main()
