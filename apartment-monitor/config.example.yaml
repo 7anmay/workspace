@@ -1,0 +1,43 @@
+interval_minutes: 15
+state_path: state.json
+neighborhoods:
+  - Mission Bay
+  - Dogpatch
+  - SoMa
+  - South Beach
+  - Potrero Hill
+  - Rincon Hill
+  - Design District
+criteria:
+  - label: 2B2B under $5K
+    bedrooms: 2
+    min_bathrooms: 2
+    max_price: 5000
+  - label: 3B2B under $6K
+    bedrooms: 3
+    min_bathrooms: 2
+    max_price: 6000
+sources:
+  - id: equity-855-brannan
+    name: 855 Brannan
+    kind: webpage
+    url: https://www.equityapartments.com/san-francisco/soma/855-brannan-apartments##unit-availability-tile
+    neighborhood: SoMa
+    render_js: true
+  - id: quincy-sf
+    name: The Quincy
+    kind: webpage
+    url: https://www.quincysf.com/floor-plans-and-availability/
+    neighborhood: SoMa
+    render_js: true
+  - id: avalon-mission-bay
+    name: Avalon at Mission Bay
+    kind: webpage
+    url: https://www.avaloncommunities.com/california/san-francisco-apartments/avalon-at-mission-bay/#community-unit-listings
+    neighborhood: Mission Bay
+    render_js: true
+  - id: craigslist-sf
+    name: Craigslist SF apartments
+    kind: craigslist
+    url: https://sfbay.craigslist.org/search/sfc/apa
+    neighborhood: San Francisco
