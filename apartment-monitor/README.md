@@ -29,6 +29,8 @@ Required Slack app setup:
 
 ## Deploy with Docker Compose
 
+Use this on a durable host such as a VPS, home server, or always-on local machine. A Cursor Cloud agent VM is useful for building and testing, but should not be treated as the long-term production host for apartment alerts.
+
 1. Copy the environment template:
 
 ```bash
@@ -50,6 +52,18 @@ apartment-monitor --config /data/config.yaml serve
 ```
 
 `serve` runs scheduled searches and the Slack command listener in one process.
+
+## Deploy without Docker
+
+On a durable machine with Python 3.11+ and tmux:
+
+```bash
+cp .env.example .env
+# Fill in SLACK_BOT_TOKEN and SLACK_APP_TOKEN.
+./scripts/deploy-venv.sh
+```
+
+This creates `.venv`, installs the browser dependencies, initializes `data/config.yaml`, and starts `apartment-monitor --config data/config.yaml serve` in tmux session `apartment-monitor`.
 
 ## Local install
 
