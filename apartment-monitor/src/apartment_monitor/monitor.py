@@ -58,8 +58,9 @@ class ApartmentMonitor:
             source = build_source(source_config, config)
             try:
                 listings = source.fetch()
-            except Exception:
-                logger.exception("Failed to fetch source %s", source_config.id)
+            except Exception as exc:
+                logger.warning("Failed to fetch source %s: %s", source_config.id, exc)
+                logger.debug("Source fetch traceback", exc_info=True)
                 continue
             results.extend(
                 listing for listing in listings if listing_matches(listing, config.criteria, config.neighborhoods)
